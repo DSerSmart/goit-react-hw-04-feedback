@@ -9,7 +9,7 @@ import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
 
 import './App.css';
 
-const App = () => {
+export const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
@@ -17,13 +17,14 @@ const App = () => {
  
  
   const clickHandler = event => {
-    switch (event.target.name){
+    switch (event.target.name) {
       case 'good':
         return setGood(prevState => prevState + 1);
-        case 'neutral':
-          return setNeutral(prevState => prevState + 1);
-          case 'bad':
-            return setBad(prevState => prevState + 1);
+      case 'neutral':
+        return setNeutral(prevState => prevState + 1);
+      case 'bad':
+        return setBad(prevState => prevState + 1);
+        default: return;
     }
   };
   const total = good+neutral+bad; 
@@ -45,7 +46,7 @@ const App = () => {
                 neutral={neutral}
                 bad={bad}
                 total={total}
-                positivePercentage={countPositiveFeedbackPercentage}
+                positivePercentage={countPositiveFeedbackPercentage()}
               />
             ) : (
               <Notification message="No feedback given" />
