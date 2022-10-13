@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import  { useState  } from 'react';
 
 import Layout from './Layout/Layout';
 import Section from './Section/Section';
@@ -8,47 +8,36 @@ import CardInterface from './CardInterface/CardInterface';
 import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
 
 import './App.css';
-//состояние при загрузке стреници
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+
+const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+ 
+ 
+ 
+  const clickHandler = event => {
+    switch (event.target.name){
+      case 'good':
+        return setGood(prevState => prevState + 1);
+        case 'neutral':
+          return setNeutral(prevState => prevState + 1);
+          case 'bad':
+            return setBad(prevState => prevState + 1);
+    }
   };
-  //  создаём метод класса
-  clickHandler = event => {
-    const { name } = event.target; //получаем target (сохранённый в локальной переменной name)строик №44  <FeedbackOptions onLeaveFeedback={this.clickHandler} />
-    //деструктуризация const { target } = event;
-    this.setState(state => ({ [name]: state[name] + 1 }));
-    //this.setState-метод перезаписи состаяния
-    //[name]-то что мыхотим переписать
-    //state[name] + 1 это то что мы хатим записать
-  };
+  const total = good+neutral+bad; 
 
-  countTotalFeedback = () => {
-    return Object.values(this.state).reduce((acc, item) => {
-      //Object.keys(obj) возвращает массив ключей собственных свойств обьекта
-      return acc + item; //сумма всех фидбеков
-    });
-  };
-
-  countPositiveFeedbackPercentage = () => {
-    return Math.round((this.state.good / this.countTotalFeedback()) * 100); // Math.round(num) - возвращает значение числа округлённое до ближайшего целого (состояния good делит на countTotalFeedback и уммнажает на 100) countTotalFeedback и уммнажает на 100
-  }; //получаем процент от хороших одзивов
-
-  render() {
-    const total = this.countTotalFeedback();
-    const positivePercentage = this.countPositiveFeedbackPercentage();
-    const { good, neutral, bad } = this.state;
-
+  const countPositiveFeedbackPercentage = () => {
+    return Math.round((good / total) * 100); 
+   }; 
     return (
       <Layout>
         <h1>Home Work #2.1</h1>
         <CardInterface>
           <Section title="Please leave feedback">
-            <FeedbackOptions onLeaveFeedback={this.clickHandler} />
+            <FeedbackOptions onLeaveFeedback={clickHandler} />
           </Section>
-          {/* вазврат фыдбека +1 с трёх кнопак компонента FeedbackOptions */}
           <Section title="Statistics">
             {total ? (
               <Statistics
@@ -56,7 +45,7 @@ export class App extends Component {
                 neutral={neutral}
                 bad={bad}
                 total={total}
-                positivePercentage={positivePercentage}
+                positivePercentage={countPositiveFeedbackPercentage}
               />
             ) : (
               <Notification message="No feedback given" />
@@ -66,4 +55,4 @@ export class App extends Component {
       </Layout>
     );
   }
-}
+  export default App;
